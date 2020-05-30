@@ -1,6 +1,7 @@
 import run
 import sys
 import json
+import plotext.plot as plx
 
 # function to add to JSON 
 # https://www.geeksforgeeks.org/append-to-json-file-using-python/
@@ -9,7 +10,18 @@ def write_json(data, filename='data.json'):
         json.dump(data, f, indent=4) 
 
 def analyze_runs():
-    print("analyze")
+    with open('data.json') as file:
+        data = json.load(file)
+    
+    runs = []
+
+    for i in data.values():
+        for j in i:
+            obj = run.Run(j['date'], j['distance'], j['time'], j['pace'], j['elevation'])
+            runs.append(obj)
+
+    for i in runs:
+        print(i.to_string())
 
 def log_run():
     date = input("Run date? Format: yyyy-mm-dd: ")
@@ -44,16 +56,17 @@ def log_run():
     write_json(data)  
 
 def help_me():
-    print("foo")
+    print("Usage: python3 main.py [flag]")
+    print("Use -l to log a run, or -d to display your data.")
 
 def main(args):
-    flag = args[1]
-
     # check to see if any args besides filename were passed
     if len(args) <= 1:
         print("Not enough args. Use -h for help.")
         quit()
-    
+
+    flag = args[1]
+
     # check flags for options
     if flag == "-h":
         help_me()
