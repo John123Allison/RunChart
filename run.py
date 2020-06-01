@@ -1,8 +1,10 @@
 import math
+import datetime
 
 class Run:
-    def __init__(self, date, distance, time, pace, elevation):
-        self.date = date
+    def __init__(self, date_raw, distance, time, pace, elevation):
+        self.date = date_raw
+        # convert raw string to datetime object
         self.distance = distance
         self.time = time
         self.pace = pace

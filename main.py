@@ -1,7 +1,7 @@
 import run
 import sys
 import json
-import plotext.plot as plx
+import matplotlib.pyplot as plt
 
 # function to add to JSON 
 # https://www.geeksforgeeks.org/append-to-json-file-using-python/
@@ -20,8 +20,19 @@ def analyze_runs():
             obj = run.Run(j['date'], j['distance'], j['time'], j['pace'], j['elevation'])
             runs.append(obj)
 
-    for i in runs:
-        print(i.to_string())
+    dates_x = []
+    for r in runs:
+        str_1 = r.date.replace('-', '')
+        dates_x.append(int(str_1))
+
+    time_y = []
+    for r in runs:
+        time_y.append(r.time)  
+
+    plt.plot(dates_x, time_y)
+    plt.ylabel('Distance')
+    plt.xlabel('Date')
+    plt.show()
 
 def log_run():
     date = input("Run date? Format: yyyy-mm-dd: ")
@@ -31,11 +42,9 @@ def log_run():
     time_seconds = input("Time seconds: ")
     time = int(time_minutes) * 60 + int(time_seconds)
 
-    pace_minutes = input("Pace minutes: ")
-    pace_seconds = input("Pace seconds: ")
-    pace = int(pace_minutes) * 60 + int(pace_seconds)
+    pace = time / distance
 
-    elevation = input("Elevation: ")
+    elevation = input("Elevation (ft): ")
 
     run = {
         "date":date,
