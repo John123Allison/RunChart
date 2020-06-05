@@ -3,8 +3,13 @@ import datetime
 
 class Run:
     def __init__(self, date_raw, distance, time, pace, elevation):
-        self.date = date_raw
         # convert raw string to datetime object
+        date_raw = date_raw.replace('-', '')
+        date_raw_year = int(date_raw[0:4])
+        date_raw_month = int(date_raw[4:6])
+        date_raw_day = int(date_raw[6:8])
+        self.date = datetime.date(date_raw_year, date_raw_month, date_raw_day)
+
         self.distance = distance
         self.time = time
         self.pace = pace
