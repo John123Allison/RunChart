@@ -10,7 +10,7 @@ def write_json(data, filename='data.json'):
     with open(filename,'w') as f: 
         json.dump(data, f, indent=4) 
 
-def analyze_runs():
+def analyze_runs(y_axis_data):
     with open('data.json') as file:
         data = json.load(file)
     
@@ -25,15 +25,18 @@ def analyze_runs():
     dates_x = []
     for r in runs:
         dates_x.append(r.date)
-    time_y = []
+    data_y = []
     for r in runs:
-        time_y.append(r.time)  
+        if y_axis_data == "pace":
+            data_y.append(r.pace) 
+        elif y_axis_data == "distance":
+            data_y.append(r.distance)
 
-    plt.plot_date(dates_x, time_y) 
+    plt.plot_date(dates_x, data_y) 
     plt.show()   
 
 def log_run():
-    date = input("Run date? Format: yyyy-mm-dd: ")
+    date = input("Run date? Format: yyyy-mm-sd: ")
     distance = int(input("Distance (miles): "))
     
     time_minutes = input("Time minutes: ")
@@ -63,8 +66,9 @@ def log_run():
     write_json(data)  
 
 def help_me():
-    print("Usage: python3 main.py [flag]")
-    print("Use -l to log a run, or -d to display your data.")
+    print("Usage: python3 main.py [flags]")
+    print("Flag 1: Use -l to log a run, or -s to display your data.")
+    print("Flag 2: Use -p to display pace data, use -d to display distance data.")
 
 def main(args):
     # check to see if any args besides filename were passed
@@ -72,17 +76,31 @@ def main(args):
         print("Not enough args. Use -h for help.")
         quit()
 
-    flag = args[1]
+    mode = ""
+
+    flags = args[1:]
 
     # check flags for options
-    if flag == "-h":
-        help_me()
-    elif flag == "-l":
-        log_run()
-    elif flag == "-d":
-        analyze_runs()
+    if flags[0] == "-h":
+        mode = "help"
+    elif flags[0] == "-l":
+        mode = "log"
+    elif flags[0] == "-s":
+        mode = "show"
     else:
         print("Invalid options. Use -h for help.")
+
+    if mode == "help":
+        help_me()
+    elif mode == "log":
+        log_run()
+    elif mode == "data":
+        if flags[1] == "-p":
+            analyze_runs("pace")
+        elif flags[1] == "-d":
+            analyze_runs("distance")
+        else:
+            print("Need another argument! Use the -h flag for help.")
 
 if __name__ == "__main__":
     main(sys.argv)
