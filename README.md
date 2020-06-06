@@ -3,6 +3,7 @@ Personal tracker for your running statistics. Currently, only supports plotting 
 
 ## Usage
 To log a run, navigate to the directory and run `python[3] ./main.py -l`
+
 To display your run data, navigate to the directory and run `python[3] ./main.py -d`
 
 ## Project Goals
